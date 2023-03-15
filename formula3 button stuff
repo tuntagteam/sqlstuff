@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <center><title>Connect to DBMS</title> 
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: auto;
+        }
+        th, td {
+            border: 2px solid black;
+            padding: 5px;
+            text-align: center;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <h1>DB connection</h1>
+    <?php
+        $dbserver = "localhost:61";
+        $username = "root";
+        $pwd = "123";
+        $dbname = "aquaculturedb";
+        
+        $conn = mysqli_connect($dbserver , $username , $pwd ,$dbname);
+
+        if(!$conn) {
+            die("Connection Failed :" .mysqli_connect_error());
+        }
+        
+        $sqlstr = "SELECT geographid, geographthname, geographenname FROM tbgeographies";
+        $result = mysqli_query($conn, $sqlstr) or die(mysqli_error($conn));
+
+        if(mysqli_num_rows($result) > 0){
+    ?>
+    <table>
+        <tr>
+            <th>รหัส</th>
+            <th>ภูมิภาค (ไทย)</th>
+            <th>ภูมิภาค (อังกฤษ)</th>
+            <th>แก้ไข</th>
+        </tr>
+        <?php  
+            while($row = mysqli_fetch_assoc($result)) { 
+        ?>
+        <tr>
+            <td><?php echo $row["geographid"] ?></td>
+            <td><?php echo $row["geographthname"] ?></td>
+            <td><?php echo $row["geographenname"] ?></td>
+            <td>
+                <button onclick="editFunction(<?php echo $row['geographid'] ?>)">Edit</button>
+                <button onclick="deleteFunction(<?php echo $row['geographid'] ?>)">Delete</button>
+            </td>
+        </tr> 
+        <?php        
+            }
+        ?>
+    </table>
+    <?php        
+        }
+    ?>
+
+
+    <script>
+        function editFunction(id) {
+            // Do something when Edit button is clicked with the specific id
+            console.log("Edit button clicked with id: " + id);
+        }
+
+        function deleteFunction(id) {
+            // Do something when Delete button is clicked with the specific id
+            console.log("Delete button clicked with id: " + id);
+        }
+    </script>
+</body>
+</html>
