@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect to DBMS</title>
+</head>
+<body>
+     <h1>DB connecttion</h1>
+     <?php
+
+            $dbserver = "localhost:61";
+            $username = "root";
+            $pwd = "123";
+            $dbname = "aquaculturedb";
+            
+            $conn = mysqli_connect($dbserver , $username , $pwd ,$dbname);
+
+            /* if($conn) {
+                echo "ได้แล้วนะจ๊ะ" ;
+            }else{
+                echo "ยังไม่ได้นะจ๊ะ" || die("bye");
+            } */
+
+            if(!$conn) {
+                die("Connection Failed :" .mysqli_connect_error());
+            }
+            
+            //SELECT geographid, geographthname, geographenname FROM tbgeographies;
+
+            $sqlstr =  "SELECT geographid, geographthname, ";
+            $sqlstr = $sqlstr . "geographenname FROM tbgeographies" ; //ต่อคำสั่งจากด้านบน
+            $result = mysqli_query($conn, $sqlstr) or die(mysqli_error($conn));
+
+            if(mysqli_num_rows($result) > 0){
+    ?>
+        <table>
+            <tr>
+                <td>รหัส</td>
+                <td>ภูมิภาค (ไทย)</td>
+                <td>ภูมิภาค (อังกฤษ)</td>
+            </tr>
+    <?php  while($row = mysqli_fetch_assoc($result)) { 
+    ?>
+            <tr>
+                <td><?php echo $row["geographid"] ?></td>
+                <td><?php echo $row["geographthname"] ?></td>
+                <td><?php echo $row["geographenname"] ?></td>
+            </tr> 
+    </table>
+    <?php        
+                }
+            }
+    ?>
+        
+</body>
+</html>
